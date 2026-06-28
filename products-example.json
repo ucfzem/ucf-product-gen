@@ -1,0 +1,43 @@
+[
+  {
+    "productName": "Samsung Galaxy S24 Ultra",
+    "category": "Smartphone",
+    "tone": "professional",
+    "language": "fr",
+    "targetAudience": "Professionnels et technophiles",
+    "attributes": {
+      "Écran": "6.8\" AMOLED 120Hz",
+      "Processeur": "Snapdragon 8 Gen 3",
+      "RAM": "12GB",
+      "Stockage": "256GB",
+      "Appareil photo": "200MP"
+    }
+  },
+  {
+    "productName": "MacBook Air M3",
+    "category": "Ordinateur portable",
+    "tone": "luxury",
+    "language": "fr",
+    "targetAudience": "Créatifs et professionnels",
+    "attributes": {
+      "Écran": "15.3\" Liquid Retina",
+      "Processeur": "Apple M3",
+      "RAM": "16GB",
+      "Stockage": "512GB SSD",
+      "Autonomie": "18 heures"
+    }
+  },
+  {
+    "productName": "Sony WH-1000XM5",
+    "category": "Casque audio",
+    "tone": "professional",
+    "language": "fr",
+    "targetAudience": "Audiophiles et voyageurs",
+    "attributes": {
+      "Type": "Sans fil, circum-aural",
+      "Réduction de bruit": "Adaptative",
+      "Autonomie": "30 heures",
+      "Codecs": "LDAC, AAC, SBC"
+    }
+  }
+]
