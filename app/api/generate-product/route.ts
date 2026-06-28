@@ -91,8 +91,9 @@ Génère la fiche produit complète selon le format JSON demandé.`
     })
   } catch (error) {
     console.error('Erreur génération fiche produit:', error)
+    const errorMsg = error instanceof Error ? error.message : 'Erreur inconnue'
     return NextResponse.json(
-      { success: false, error: 'Échec de la génération. Vérifiez vos paramètres.' },
+      { success: false, error: `Échec: ${errorMsg}` },
       { status: 500 }
     )
   }
