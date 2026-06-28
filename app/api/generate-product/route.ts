@@ -14,9 +14,6 @@ const ProductInputSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const { default: OpenAI } = await import('openai')
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
     const body = await request.json()
     const input = ProductInputSchema.parse(body)
 
@@ -56,18 +53,31 @@ ${attrsText}
 
 Génère la fiche produit complète selon le format JSON demandé.`
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-      temperature: 0.7,
-      max_tokens: 1500,
-      response_format: { type: 'json_object' },
+    const completion = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 1500,
+        response_format: { type: 'json_object' },
+      }),
     })
 
-    const rawContent = completion.choices[0].message.content
+    const completionData = await completion.json()
+
+    if (!completion.ok) {
+      throw new Error(`Groq API error: ${completionData.error?.message || 'Unknown error'}`)
+    }
+
+    const rawContent = completionData.choices[0].message.content
     if (!rawContent) throw new Error('Réponse vide de l\'API')
 
     const parsed = JSON.parse(rawContent)
@@ -87,7 +97,7 @@ Génère la fiche produit complète selon le format JSON demandé.`
     return NextResponse.json({
       success: true,
       data: validated,
-      tokensUsed: completion.usage?.total_tokens,
+      tokensUsed: completionData.usage?.total_tokens,
     })
   } catch (error) {
     console.error('Erreur génération fiche produit:', error)
