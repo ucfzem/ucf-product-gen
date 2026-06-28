@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const ProductInputSchema = z.object({
   productName: z.string().min(2).max(200),
   category: z.string().min(2),
