@@ -15,13 +15,26 @@ interface GeneratedProduct {
 
 export default function GeneratePageContent() {
   const searchParams = useSearchParams()
+
+  const parseAttributes = (): Record<string, string> => {
+    const attrs: Record<string, string> = {}
+    const attrsStr = searchParams.get('attrs') || ''
+    if (attrsStr) {
+      attrsStr.split(',').forEach(pair => {
+        const [k, ...v] = pair.split(':')
+        if (k && v.length) attrs[k.trim()] = v.join(':').trim()
+      })
+    }
+    return attrs
+  }
+
   const [formData, setFormData] = useState({
     productName: searchParams.get('name') || '',
     category: searchParams.get('category') || '',
     tone: searchParams.get('tone') || 'professional',
     language: searchParams.get('lang') || 'fr',
     targetAudience: searchParams.get('audience') || '',
-    attributes: {} as Record<string, string>,
+    attributes: parseAttributes(),
   })
   const [attrKey, setAttrKey] = useState('')
   const [attrVal, setAttrVal] = useState('')
@@ -130,6 +143,8 @@ export default function GeneratePageContent() {
           if (formData.tone !== 'professional') params.set('tone', formData.tone)
           if (formData.language !== 'fr') params.set('lang', formData.language)
           if (formData.targetAudience) params.set('audience', formData.targetAudience)
+          const attrs = Object.entries(formData.attributes).map(([k, v]) => `${k}:${v}`).join(',')
+          if (attrs) params.set('attrs', attrs)
           const url = `${window.location.origin}/generate?${params.toString()}`
           navigator.clipboard.writeText(url)
           alert('Lien copié !')
