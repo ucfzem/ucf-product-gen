@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -13,12 +12,11 @@ const ProductInputSchema = z.object({
   targetAudience: z.string().optional(),
 })
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
 export async function POST(request: NextRequest) {
   try {
+    const { default: OpenAI } = await import('openai')
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+
     const body = await request.json()
     const input = ProductInputSchema.parse(body)
 
