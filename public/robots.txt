@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ucf-product-gen.vercel.app/sitemap.xml
